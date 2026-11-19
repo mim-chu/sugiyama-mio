@@ -225,6 +225,7 @@
     } else {
       officialLink.style.display = "none";
     }
+    setupMediaSession(ep);
     var r = record(ep);
     var startPos = (r.done) ? 0 : (r.pos || 0);
     var onMeta = function () {
@@ -301,7 +302,7 @@
     }
     if (audio.paused) { audio.play(); } else { audio.pause(); }
   };
-  document.getElementById("btn-prev").onclick = function () {
+  function doPrev() {
     if (!current) { return; }
     if (audio.currentTime && audio.currentTime > 5) {
       try { audio.currentTime = 0; } catch (e) {}
@@ -309,8 +310,8 @@
     }
     var pv = prevEpisode(current);
     if (pv) { playEpisode(pv, true); }
-  };
-  document.getElementById("btn-next").onclick = function () {
+  }
+  function doNext() {
     if (!current) {
       var c = resumeChoice();
       if (c) { playEpisode(c.ep, true); }
@@ -323,7 +324,29 @@
     }
     var nx2 = nextEpisode(current);
     if (nx2) { playEpisode(nx2, true); }
-  };
+  }
+  document.getElementById("btn-prev").onclick = doPrev;
+  document.getElementById("btn-next").onclick = doNext;
+
+  function setupMediaSession(ep) {
+    try {
+      if (!("mediaSession" in navigator)) { return; }
+      if (typeof MediaMetadata !== "undefined") {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: (ep.special ? "" : "第" + ep.number + "回 ") + ep.title,
+          artist: "personal player",
+          album: ep.special ? "シャッフルラジオ" : "personal player"
+        });
+      }
+      var ms = navigator.mediaSession;
+      try { ms.setActionHandler("play", function () { audio.play(); }); } catch (e) {}
+      try { ms.setActionHandler("pause", function () { audio.pause(); }); } catch (e) {}
+      try { ms.setActionHandler("previoustrack", function () { doPrev(); }); } catch (e) {}
+      try { ms.setActionHandler("nexttrack", function () { doNext(); }); } catch (e) {}
+      try { ms.setActionHandler("seekbackward", function () { audio.currentTime = Math.max(0, (audio.currentTime || 0) - 10); }); } catch (e) {}
+      try { ms.setActionHandler("seekforward", function () { audio.currentTime = (audio.currentTime || 0) + 30; }); } catch (e) {}
+    } catch (e) {}
+  }
   seekEl.onchange = function () {
     if (audio.duration) { audio.currentTime = (seekEl.value / 100) * audio.duration; }
   };
