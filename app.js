@@ -30,6 +30,7 @@
   var episodes = []; // ascending by number
   var current = null; // episode object
   var activeFilter = "all";
+  var activeRange = 0;
   var limit = PAGE_SIZE;
   var sleepTimer = null;
   var sleepAtEnd = false;
@@ -88,6 +89,7 @@
     var i, ep, st;
     for (i = 0; i < episodes.length; i++) {
       ep = episodes[i];
+      if (activeRange > 0 && (ep.number < activeRange || ep.number > activeRange + 99)) { continue; }
       if (activeFilter !== "all") {
         st = statusOf(ep);
         if (st !== activeFilter) { continue; }
@@ -333,6 +335,21 @@
         limit = PAGE_SIZE; render();
       };
     })(fbtns[k]);
+  }
+
+  var rangeBox = document.getElementById("ranges");
+  if (rangeBox) {
+    var rbtns = rangeBox.getElementsByTagName("button");
+    for (var r = 0; r < rbtns.length; r++) {
+      rbtns[r].onclick = (function (btn) {
+        return function () {
+          activeRange = parseInt(btn.getAttribute("data-range"), 10) || 0;
+          for (var m2 = 0; m2 < rbtns.length; m2++) { rbtns[m2].className = ""; }
+          btn.className = "active";
+          limit = PAGE_SIZE; render();
+        };
+      })(rbtns[r]);
+    }
   }
 
   // Load catalog via XHR (fetch avoided for old Safari)
