@@ -161,6 +161,14 @@
     var label = state.shuffle ? "シャッフル ON" : "シャッフル OFF";
     if (shuffleBtn) { shuffleBtn.innerHTML = label; }
   }
+  function prevEpisode(ep) {
+    for (var i = 0; i < episodes.length; i++) {
+      if (episodes[i].number === ep.number) {
+        return episodes[i - 1] || null;
+      }
+    }
+    return null;
+  }
   function nextEpisode(ep) {
     for (var i = 0; i < episodes.length; i++) {
       if (episodes[i].number === ep.number) {
@@ -293,12 +301,28 @@
     }
     if (audio.paused) { audio.play(); } else { audio.pause(); }
   };
-  document.getElementById("btn-back").onclick = function () {
-    audio.currentTime = Math.max(0, (audio.currentTime || 0) - 10);
+  document.getElementById("btn-prev").onclick = function () {
+    if (!current) { return; }
+    if (audio.currentTime && audio.currentTime > 5) {
+      try { audio.currentTime = 0; } catch (e) {}
+      return;
+    }
+    var pv = prevEpisode(current);
+    if (pv) { playEpisode(pv, true); }
   };
-  document.getElementById("btn-fwd").onclick = function () {
-    if (audio.duration) { audio.currentTime = Math.min(audio.duration, (audio.currentTime || 0) + 30); }
-    else { audio.currentTime = (audio.currentTime || 0) + 30; }
+  document.getElementById("btn-next").onclick = function () {
+    if (!current) {
+      var c = resumeChoice();
+      if (c) { playEpisode(c.ep, true); }
+      return;
+    }
+    if (state.shuffle) {
+      var rnd = randomEpisode(current);
+      if (rnd) { playEpisode(rnd, true); }
+      return;
+    }
+    var nx2 = nextEpisode(current);
+    if (nx2) { playEpisode(nx2, true); }
   };
   seekEl.onchange = function () {
     if (audio.duration) { audio.currentTime = (seekEl.value / 100) * audio.duration; }
