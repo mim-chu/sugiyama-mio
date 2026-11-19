@@ -114,7 +114,7 @@
       }
       out.push(ep);
     }
-    var dir = -1; // always newest first
+    var dir = (sortEl && sortEl.value === "old") ? 1 : -1;
     out.sort(function (a, b) {
       var da = new Date(a.pubDate).getTime() || 0;
       var db = new Date(b.pubDate).getTime() || 0;
@@ -409,6 +409,7 @@
   // List controls
   searchEl.oninput = function () { limit = PAGE_SIZE; render(); };
   searchEl.onkeyup = function () { limit = PAGE_SIZE; render(); };
+  if (sortEl) { sortEl.onchange = function () { limit = PAGE_SIZE; render(); }; }
   moreBtn.onclick = function () { limit += PAGE_SIZE; render(); };
   var filterBox = document.getElementById("filters");
   var fbtns = filterBox.getElementsByTagName("button");
