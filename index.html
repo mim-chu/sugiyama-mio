@@ -10,7 +10,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./styles.css?v=20261120e">
+<link rel="stylesheet" href="./styles.css?v=20261120f">
 </head>
 <body>
 <header class="site-header">
@@ -34,12 +34,8 @@
     <div class="section-heading">
       <h2>エピソード</h2>
       <span class="count" id="episode-count"></span>
-    </div>
-
-    <label class="search">
-      <span class="search-label">検索</span>
       <input type="search" id="episode-search" placeholder="タイトル・回番号で検索" autocomplete="off">
-    </label>
+    </div>
 
     <div class="controls">
       <div class="filters" id="filters">
@@ -66,6 +62,9 @@
         <button type="button" data-range="401">401〜500</button>
         <button type="button" data-range="501">501〜</button>
         <button type="button" data-range="shuffle">シャッフルラジオ</button>
+        <button type="button" data-range="guest">ゲスト回</button>
+        <button type="button" data-range="tokubetsu">特別回</button>
+        <button type="button" data-range="parallel">パラレル回</button>
       </div>
     </div>
 
@@ -125,6 +124,6 @@
 </div>
 
 <audio id="audio" preload="metadata"></audio>
-<script src="./app.js?v=20261120e"></script>
+<script src="./app.js?v=20261120f"></script>
 </body>
 </html>

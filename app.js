@@ -35,6 +35,8 @@
     { number: 1005, special: true, title: "ARuFa・加藤のペポペポラジオ「徹底討論！『カービィ』ってエッチ？ エッチじゃない？」", source: "https://omocoro.heteml.net/radio/sp2/pepopepo_radio.mp3", link: "https://omocoro.jp/radio/121090/", pubDate: "Mon, 02 Oct 2017 15:00:00 GMT" }
   ];
 
+  var TOKUBETSU = { 9: 1, 12: 1, 52: 1, 59: 1, 77: 1, 113: 1, 133: 1, 134: 1, 137: 1, 144: 1, 149: 1, 167: 1, 175: 1, 187: 1, 188: 1, 197: 1, 218: 1, 226: 1, 248: 1, 268: 1, 279: 1, 295: 1, 301: 1, 304: 1, 328: 1, 365: 1, 375: 1, 433: 1, 462: 1, 470: 1, 484: 1, 500: 1, 532: 1 };
+  var PARALLEL = { 134: 1, 187: 1 };
   var episodes = []; // ascending by number
   var current = null; // episode object
   var activeFilter = "all";
@@ -98,13 +100,16 @@
     for (i = 0; i < episodes.length; i++) {
       ep = episodes[i];
       if (activeRange === "shuffle") { if (!ep.special) { continue; } }
+      else if (activeRange === "guest") { if (!ep.guest) { continue; } }
+      else if (activeRange === "tokubetsu") { if (!ep.tokubetsu) { continue; } }
+      else if (activeRange === "parallel") { if (!ep.parallel) { continue; } }
       else if (activeRange > 0 && (ep.special || ep.number < activeRange || ep.number > activeRange + 99)) { continue; }
       if (activeFilter !== "all") {
         st = statusOf(ep);
         if (st !== activeFilter) { continue; }
       }
       if (q) {
-        var hay = (ep.title + " " + ep.number + " 第" + ep.number + "回" + (ep.special ? " シャッフルラジオ スペシャル" : "")).toLowerCase();
+        var hay = (ep.title + " " + ep.number + " 第" + ep.number + "回" + (ep.special ? " シャッフルラジオ スペシャル" : "") + (ep.guest ? " ゲスト回" : "") + (ep.tokubetsu ? " 特別回" : "") + (ep.parallel ? " パラレル回" : "")).toLowerCase();
         if (hay.indexOf(q) === -1) { continue; }
       }
       out.push(ep);
@@ -133,7 +138,11 @@
         + '<span class="ep-num">' + (ep.special ? "SP" : "第" + ep.number + "回") + '</span>'
         + '<span class="ep-status ' + st + '">' + statusLabel(st) + "</span>"
         + '<div class="ep-title">' + escapeHtml(ep.title) + "</div>"
-        + '<div class="ep-date">' + fmtDate(ep.pubDate) + "</div>"
+        + '<div class="ep-date">' + fmtDate(ep.pubDate)
+        + (ep.guest ? ' <span class="ep-tag">ゲスト</span>' : "")
+        + (ep.tokubetsu ? ' <span class="ep-tag">特別</span>' : "")
+        + (ep.parallel ? ' <span class="ep-tag">パラレル</span>' : "")
+        + "</div>"
         + "</li>";
     }
     listEl.innerHTML = html;
@@ -423,7 +432,7 @@
       rbtns[r].onclick = (function (btn) {
         return function () {
           var rv = btn.getAttribute("data-range");
-          activeRange = (rv === "shuffle") ? "shuffle" : (parseInt(rv, 10) || 0);
+          activeRange = (rv === "shuffle" || rv === "guest" || rv === "tokubetsu" || rv === "parallel") ? rv : (parseInt(rv, 10) || 0);
           for (var m2 = 0; m2 < rbtns.length; m2++) { rbtns[m2].className = ""; }
           btn.className = "active";
           limit = PAGE_SIZE; render();
@@ -446,6 +455,11 @@
       }
       for (var s2 = 0; s2 < SPECIALS.length; s2++) { episodes.push(SPECIALS[s2]); }
       episodes.sort(function (a, b) { return a.number - b.number; });
+      for (var t = 0; t < episodes.length; t++) {
+        episodes[t].guest = episodes[t].title.indexOf("外部ゲスト") !== -1;
+        episodes[t].tokubetsu = !!TOKUBETSU[episodes[t].number];
+        episodes[t].parallel = !!PARALLEL[episodes[t].number];
+      }
       updateHero();
       render();
     } catch (e) {
