@@ -109,7 +109,13 @@
       }
       out.push(ep);
     }
-    if (sortEl.value === "new") { out.reverse(); }
+    var dir = (sortEl.value === "new") ? -1 : 1;
+    out.sort(function (a, b) {
+      var da = new Date(a.pubDate).getTime() || 0;
+      var db = new Date(b.pubDate).getTime() || 0;
+      if (da !== db) { return (da - db) * dir; }
+      return (a.number - b.number) * dir;
+    });
     return out;
   }
 
