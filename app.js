@@ -35,8 +35,8 @@
     { number: 1005, special: true, title: "ARuFa・加藤のペポペポラジオ「徹底討論！『カービィ』ってエッチ？ エッチじゃない？」", source: "https://omocoro.heteml.net/radio/sp2/pepopepo_radio.mp3", link: "https://omocoro.jp/radio/121090/", pubDate: "Mon, 02 Oct 2017 15:00:00 GMT" }
   ];
 
-  var TOKUBETSU = { 9: 1, 12: 1, 52: 1, 59: 1, 77: 1, 113: 1, 133: 1, 134: 1, 137: 1, 144: 1, 149: 1, 167: 1, 175: 1, 187: 1, 188: 1, 197: 1, 218: 1, 226: 1, 248: 1, 268: 1, 279: 1, 295: 1, 301: 1, 304: 1, 328: 1, 365: 1, 375: 1, 433: 1, 462: 1, 470: 1, 484: 1, 500: 1, 532: 1 };
-  var PARALLEL = { 134: 1, 187: 1 };
+  var TOKUBETSU = { 134: 1, 167: 1, 187: 1, 188: 1, 200: 1, 268: 1, 375: 1, 433: 1, 500: 1 };
+  var PARALLEL = {};
   var episodes = []; // ascending by number
   var current = null; // episode object
   var activeFilter = "all";
@@ -109,7 +109,7 @@
         if (st !== activeFilter) { continue; }
       }
       if (q) {
-        var hay = (ep.title + " " + ep.number + " 第" + ep.number + "回" + (ep.special ? " シャッフルラジオ スペシャル" : "") + (ep.guest ? " ゲスト回" : "") + (ep.tokubetsu ? " 特別回" : "") + (ep.parallel ? " パラレル回" : "")).toLowerCase();
+        var hay = (ep.title + " " + ep.number + " 第" + ep.number + "回" + (ep.special ? " シャッフルラジオ スペシャル" : "") + (ep.guest ? " ゲスト" : "") + (ep.tokubetsu ? " 特殊" : "")).toLowerCase();
         if (hay.indexOf(q) === -1) { continue; }
       }
       out.push(ep);
@@ -140,8 +140,7 @@
         + '<div class="ep-title">' + escapeHtml(ep.title) + "</div>"
         + '<div class="ep-date">' + fmtDate(ep.pubDate)
         + (ep.guest ? ' <span class="ep-tag">ゲスト</span>' : "")
-        + (ep.tokubetsu ? ' <span class="ep-tag">特別</span>' : "")
-        + (ep.parallel ? ' <span class="ep-tag">パラレル</span>' : "")
+        + (ep.tokubetsu ? ' <span class="ep-tag">特殊</span>' : "")
         + "</div>"
         + "</li>";
     }
