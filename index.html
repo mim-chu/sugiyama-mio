@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#222831">
+<meta name="description" content="personal player">
+<title>personal player</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">personal player</div>
+    <div class="badge">非公式・個人用</div>
+  </div>
+</header>
+
+<main class="wrap main">
+  <section class="hero">
+    <p class="hero-label" id="hero-label">はじめの一回</p>
+    <h1 id="hero-title">読み込み中…</h1>
+    <p class="hero-meta" id="hero-meta"></p>
+    <button class="hero-play" id="hero-play" type="button" disabled>最初の回を聴く</button>
+    <p class="note">非公式の個人用プレーヤーです。音声は配信元のサーバーから直接再生します。各回に公式記事へのリンクがあります。</p>
+  </section>
+
+  <section>
+    <div class="section-heading">
+      <h2>エピソード</h2>
+      <span class="count" id="episode-count"></span>
+    </div>
+
+    <label class="search">
+      <span class="search-label">検索</span>
+      <input type="search" id="episode-search" placeholder="タイトル・回番号で検索" autocomplete="off">
+    </label>
+
+    <div class="controls">
+      <div class="filters" id="filters">
+        <button type="button" data-filter="all" class="active">すべて</button>
+        <button type="button" data-filter="unheard">未聴</button>
+        <button type="button" data-filter="mid">途中</button>
+        <button type="button" data-filter="done">聴了</button>
+      </div>
+      <label class="sort">並び順
+        <select id="episode-sort">
+          <option value="old">古い順</option>
+          <option value="new">新しい順</option>
+        </select>
+      </label>
+    </div>
+
+    <p id="load-error" class="error" style="display:none;">一覧を読み込めませんでした。通信状態を確認して、ページを開き直してください。</p>
+    <ul id="episode-list" class="episode-list"></ul>
+    <p id="empty-list" class="empty" style="display:none;">条件に合う回が見つかりませんでした。</p>
+    <button id="more-episodes" class="more" type="button" style="display:none;">さらに表示</button>
+  </section>
+
+  <footer class="footer">
+    <p>非公式・個人用 / Unofficial personal player. Audio is streamed directly from the original distributor.</p>
+  </footer>
+</main>
+
+<div class="player" id="player">
+  <div class="wrap player-inner">
+    <div class="now">
+      <div class="now-title" id="now-title">未選択</div>
+      <div class="now-meta" id="now-meta"></div>
+    </div>
+    <div class="seek-row">
+      <span id="time-current">0:00</span>
+      <input type="range" id="seek" min="0" max="100" value="0" step="1">
+      <span id="time-duration">0:00</span>
+    </div>
+    <div class="btn-row">
+      <button type="button" id="btn-back">-10秒</button>
+      <button type="button" id="btn-play" class="play-btn">▶ 再生</button>
+      <button type="button" id="btn-fwd">+30秒</button>
+      <label>速度
+        <select id="speed">
+          <option value="0.75">0.75x</option>
+          <option value="1" selected>1x</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+          <option value="1.75">1.75x</option>
+          <option value="2">2x</option>
+        </select>
+      </label>
+      <label>タイマー
+        <select id="sleep">
+          <option value="0">なし</option>
+          <option value="15">15分</option>
+          <option value="30">30分</option>
+          <option value="45">45分</option>
+          <option value="60">60分</option>
+          <option value="-1">この回まで</option>
+        </select>
+      </label>
+      <a id="official-link" href="#" target="_blank" rel="noopener" style="display:none;">公式記事</a>
+    </div>
+  </div>
+</div>
+
+<audio id="audio" preload="metadata"></audio>
+<script src="./app.js"></script>
+</body>
+</html>
