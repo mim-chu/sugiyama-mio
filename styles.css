@@ -1,7 +1,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif; background: #ebf0f4; color: #221d1d; padding-bottom: 150px; }
 .wrap { max-width: 760px; margin: 0 auto; padding: 0 14px; }
-.site-header { background: #ebf0f4; color: #221d1d; padding: 12px 0; border-bottom: 3px solid #221d1d; }
+.site-header { background: #ffffff; color: #221d1d; padding: 12px 0; border-bottom: 3px solid #221d1d; }
 .header-inner { overflow: hidden; }
 .brand { float: left; font-family: "Arial Black", "Hiragino Sans", sans-serif; font-weight: 900; font-style: italic; font-size: 21px; letter-spacing: 1px; color: #fff; -webkit-text-stroke: 1.5px #221d1d; text-shadow: 2px 2px 0 #221d1d; }
 .brand .rd { color: #b50a27; }
