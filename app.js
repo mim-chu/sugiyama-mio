@@ -15,6 +15,8 @@
   var heroMeta = document.getElementById("hero-meta");
   var heroLabel = document.getElementById("hero-label");
   var heroPlay = document.getElementById("hero-play");
+  var heroShuffle = document.getElementById("hero-shuffle");
+  var shuffleBtn = document.getElementById("btn-shuffle");
   var nowTitle = document.getElementById("now-title");
   var nowMeta = document.getElementById("now-meta");
   var seekEl = document.getElementById("seek");
@@ -39,7 +41,7 @@
       var raw = localStorage.getItem(STORAGE_KEY);
       if (raw) { return JSON.parse(raw); }
     } catch (e) {}
-    return { tracks: {}, last: null, speed: 1 };
+    return { tracks: {}, last: null, speed: 1, shuffle: false };
   }
   function saveState() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
@@ -134,6 +136,20 @@
     }
     return null;
   }
+  function randomEpisode(exclude) {
+    if (!episodes.length) { return null; }
+    if (episodes.length === 1) { return episodes[0]; }
+    var ep = null;
+    for (var tries = 0; tries < 10; tries++) {
+      ep = episodes[Math.floor(Math.random() * episodes.length)];
+      if (!exclude || ep.number !== exclude.number) { break; }
+    }
+    return ep;
+  }
+  function updateShuffleBtn() {
+    var label = state.shuffle ? "シャッフル ON" : "シャッフル OFF";
+    if (shuffleBtn) { shuffleBtn.innerHTML = label; }
+  }
   function nextEpisode(ep) {
     for (var i = 0; i < episodes.length; i++) {
       if (episodes[i].number === ep.number) {
@@ -163,6 +179,13 @@
     heroPlay.disabled = false;
     heroPlay.innerHTML = c.kind === "resume" ? "続きを聴く" : "この回を聴く";
     heroPlay.onclick = function () { playEpisode(c.ep, true); };
+    if (heroShuffle) {
+      heroShuffle.disabled = false;
+      heroShuffle.onclick = function () {
+        var ep = randomEpisode(current);
+        if (ep) { playEpisode(ep, true); }
+      };
+    }
   }
 
   function playByNumber(num, autoplay) {
@@ -241,6 +264,11 @@
       saveState();
     }
     if (sleepAtEnd) { clearSleep(); render(); return; }
+    if (state.shuffle) {
+      var rnd = randomEpisode(current);
+      if (rnd) { playEpisode(rnd, true); } else { render(); }
+      return;
+    }
     var nx = current ? nextEpisode(current) : null;
     if (nx) { playEpisode(nx, true); } else { render(); }
   });
@@ -274,6 +302,14 @@
     state.speed = v; saveState();
   };
   sleepEl.onchange = applySleep;
+  if (shuffleBtn) {
+    updateShuffleBtn();
+    shuffleBtn.onclick = function () {
+      state.shuffle = !state.shuffle;
+      saveState();
+      updateShuffleBtn();
+    };
+  }
   if (state.speed) {
     // Restore saved speed if present in options
     for (var i = 0; i < speedEl.options.length; i++) {
