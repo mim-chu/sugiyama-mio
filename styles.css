@@ -1,9 +1,10 @@
 * { box-sizing: border-box; }
-body { margin: 0; font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif; background: #ebf0f4; color: #221d1d; padding-bottom: 150px; }
+body { margin: 0; font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif; background: #ebf0f4; color: #221d1d; padding-bottom: 205px; }
+body.compact { padding-bottom: 118px; }
 .wrap { max-width: 760px; margin: 0 auto; padding: 0 14px; }
 .site-header { background: #ffffff; color: #221d1d; padding: 12px 0; border-bottom: 3px solid #221d1d; }
 .header-inner { overflow: hidden; }
-.brand { float: left; font-family: "Montserrat", "Arial Black", "Hiragino Sans", sans-serif; font-weight: 900; font-style: italic; font-size: 25px; letter-spacing: 0; color: #fff; -webkit-text-stroke: 1.2px #221d1d; text-shadow: none; }
+.brand { float: left; font-family: "Montserrat", "Arial Black", "Hiragino Sans", sans-serif; font-weight: 900; font-style: italic; font-size: 30px; letter-spacing: 0; color: #fff; -webkit-text-stroke: 1.4px #221d1d; text-shadow: none; }
 .brand .rd { color: #b50a27; }
 .badge { float: right; font-size: 12px; background: #b50a27; color: #fff; padding: 3px 8px; border-radius: 10px; margin-top: 4px; }
 .main { padding-top: 16px; }
@@ -38,14 +39,21 @@ body { margin: 0; font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Go
 .empty { color: #666; }
 .more { display: block; margin: 12px auto; }
 .footer { color: #888; font-size: 12px; text-align: center; padding: 20px 0; }
-.player { position: fixed; left: 0; right: 0; bottom: 0; background: #211d1d; color: #fff; padding: 10px 0 14px; border-top: 4px solid #b50a27; }
-.now-title { font-size: 14px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.now-meta { font-size: 12px; color: #ccc; }
-.seek-row { margin: 8px 0; }
-.seek-row input { width: 62%; vertical-align: middle; }
-.seek-row span { font-size: 12px; }
-.btn-row button { background: #fff; color: #221d1d; border: 0; border-radius: 16px; padding: 7px 12px; font-size: 14px; margin-right: 6px; cursor: pointer; }
-.btn-row .play-btn { font-weight: bold; background: #b50a27; color: #fff; }
-.btn-row label { font-size: 13px; margin-right: 8px; }
-.btn-row a { color: #fff; font-size: 13px; }
-@media (max-width: 480px) { .seek-row input { width: 52%; } .hero h1 { font-size: 19px; } .brand { font-size: 18px; -webkit-text-stroke-width: 0.9px; text-shadow: none; } .badge { font-size: 10px; } }
+.player { position: fixed; left: 0; right: 0; bottom: 0; background: #211d1d; color: #fff; padding: 14px 0 18px; border-top: 4px solid #b50a27; }
+.now { overflow: hidden; }
+.now-text { float: left; max-width: 78%; }
+.now-title { font-size: 16px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.now-meta { font-size: 13px; color: #ccc; }
+.collapse-btn { float: right; background: transparent; color: #fff; border: 1px solid #fff; border-radius: 14px; padding: 5px 10px; font-size: 12px; cursor: pointer; }
+.seek-row { margin: 10px 0; }
+.seek-row input { width: 62%; vertical-align: middle; height: 28px; }
+.seek-row span { font-size: 13px; }
+.btn-row button { background: #fff; color: #221d1d; border: 0; border-radius: 18px; padding: 10px 16px; font-size: 15px; margin-right: 6px; cursor: pointer; }
+.btn-row .play-btn { font-weight: bold; background: #b50a27; color: #fff; padding: 12px 22px; font-size: 17px; }
+.btn-row label { font-size: 14px; margin-right: 8px; }
+.btn-row a { color: #fff; font-size: 14px; }
+.player.compact { padding: 10px 0 12px; }
+.player.compact .seek-row, .player.compact .btn-row label, .player.compact .btn-row a { display: none; }
+.player.compact .btn-row button { padding: 8px 13px; font-size: 14px; }
+.player.compact .btn-row .play-btn { padding: 9px 18px; font-size: 15px; }
+@media (max-width: 480px) { .seek-row input { width: 52%; } .hero h1 { font-size: 19px; } .brand { font-size: 21px; -webkit-text-stroke-width: 1px; text-shadow: none; } .badge { font-size: 10px; } }

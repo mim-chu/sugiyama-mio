@@ -334,6 +334,23 @@
   document.getElementById("btn-prev").onclick = doPrev;
   document.getElementById("btn-next").onclick = doNext;
 
+  var playerEl = document.getElementById("player");
+  var collapseBtn = document.getElementById("btn-collapse");
+  function applyCompact() {
+    var c = !!state.compact;
+    if (playerEl) { playerEl.className = c ? "player compact" : "player"; }
+    document.body.className = c ? "compact" : "";
+    if (collapseBtn) { collapseBtn.innerHTML = c ? "▲ 大きく" : "▼ 小さく"; }
+  }
+  if (collapseBtn) {
+    collapseBtn.onclick = function () {
+      state.compact = !state.compact;
+      saveState();
+      applyCompact();
+    };
+  }
+  applyCompact();
+
   function setupMediaSession(ep) {
     try {
       if (!("mediaSession" in navigator)) { return; }
