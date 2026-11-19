@@ -1,1 +1,1 @@
-{"background_color":"#ebf0f4","description":"Anonymous Radio Player","display":"standalone","icons":[],"name":"Anonymous Radio Player","scope":".","short_name":"Radio Player","start_url":".","theme_color":"#ebf0f4"}
+{"background_color":"#ebf0f4","description":"Anonymous Radio Player","display":"standalone","icons":[{"sizes":"192x192","src":"icon-192.png","type":"image/png"},{"sizes":"512x512","src":"icon-512.png","type":"image/png"}],"name":"Anonymous Radio Player","scope":".","short_name":"Radio Player","start_url":".","theme_color":"#ebf0f4"}
