@@ -27,6 +27,14 @@
   var sleepEl = document.getElementById("sleep");
   var officialLink = document.getElementById("official-link");
 
+  var SPECIALS = [
+    { number: 1001, special: true, title: "ARuFa・永田のシャッフルコンビラジオ／ARuFaプロデュース「公開収録！ 刺身定食はアリ？ナシ？」", source: "https://omocoro.heteml.net/radio/sp/arunaga01.mp3", link: "https://omocoro.jp/rensai/89893/", pubDate: "Mon, 29 Aug 2016 15:00:00 GMT" },
+    { number: 1002, special: true, title: "ARuFa・永田のシャッフルコンビラジオ／永田プロデュース「ARuFaのオナニー2016」", source: "https://omocoro.heteml.net/radio/sp/arunaga02.mp3", link: "https://omocoro.jp/rensai/89893/", pubDate: "Mon, 29 Aug 2016 15:00:00 GMT" },
+    { number: 1003, special: true, title: "室木おすし・恐山のシャッフルコンビラジオ", source: "https://omocoro.heteml.net/radio/sp/osusirezan.mp3", link: "https://omocoro.jp/rensai/89981/", pubDate: "Mon, 29 Aug 2016 15:00:00 GMT" },
+    { number: 1004, special: true, title: "恐山・かまどのシャッフルコンビラジオ", source: "https://omocoro.heteml.net/radio/sp2/kamado_osorezan.mp3", link: "https://omocoro.jp/rensai/120885/", pubDate: "Sun, 01 Oct 2017 15:00:00 GMT" },
+    { number: 1005, special: true, title: "ARuFa・加藤のペポペポラジオ「徹底討論！『カービィ』ってエッチ？ エッチじゃない？」", source: "https://omocoro.heteml.net/radio/sp2/pepopepo_radio.mp3", link: "https://omocoro.jp/radio/121090/", pubDate: "Mon, 02 Oct 2017 15:00:00 GMT" }
+  ];
+
   var episodes = []; // ascending by number
   var current = null; // episode object
   var activeFilter = "all";
@@ -89,13 +97,14 @@
     var i, ep, st;
     for (i = 0; i < episodes.length; i++) {
       ep = episodes[i];
-      if (activeRange > 0 && (ep.number < activeRange || ep.number > activeRange + 99)) { continue; }
+      if (activeRange === "shuffle") { if (!ep.special) { continue; } }
+      else if (activeRange > 0 && (ep.special || ep.number < activeRange || ep.number > activeRange + 99)) { continue; }
       if (activeFilter !== "all") {
         st = statusOf(ep);
         if (st !== activeFilter) { continue; }
       }
       if (q) {
-        var hay = (ep.title + " " + ep.number + " 第" + ep.number + "回").toLowerCase();
+        var hay = (ep.title + " " + ep.number + " 第" + ep.number + "回" + (ep.special ? " シャッフルラジオ スペシャル" : "")).toLowerCase();
         if (hay.indexOf(q) === -1) { continue; }
       }
       out.push(ep);
@@ -115,7 +124,7 @@
       var st = statusOf(ep);
       var playing = current && current.number === ep.number;
       html += '<li data-num="' + ep.number + '"' + (playing ? ' class="playing"' : "") + ">"
-        + '<span class="ep-num">第' + ep.number + '回</span>'
+        + '<span class="ep-num">' + (ep.special ? "SP" : "第" + ep.number + "回") + '</span>'
         + '<span class="ep-status ' + st + '">' + statusLabel(st) + "</span>"
         + '<div class="ep-title">' + escapeHtml(ep.title) + "</div>"
         + '<div class="ep-date">' + fmtDate(ep.pubDate) + "</div>"
@@ -176,7 +185,7 @@
     var c = resumeChoice();
     if (!c) { return; }
     heroTitle.innerHTML = escapeHtml(c.ep.title);
-    heroMeta.innerHTML = "第" + c.ep.number + "回 ・ " + fmtDate(c.ep.pubDate);
+    heroMeta.innerHTML = c.ep.special ? ("シャッフルラジオ ・ " + fmtDate(c.ep.pubDate)) : ("第" + c.ep.number + "回 ・ " + fmtDate(c.ep.pubDate));
     heroLabel.innerHTML = c.kind === "resume" ? "つづきから" : (c.kind === "next" ? "つぎの回" : "はじめの一回");
     heroPlay.disabled = false;
     heroPlay.innerHTML = c.kind === "resume" ? "続きを聴く" : "この回を聴く";
@@ -200,7 +209,7 @@
     saveState();
     audio.src = ep.source;
     audio.playbackRate = parseFloat(speedEl.value) || state.speed || 1;
-    nowTitle.innerHTML = "第" + ep.number + "回 " + escapeHtml(ep.title);
+    nowTitle.innerHTML = (ep.special ? "" : "第" + ep.number + "回 ") + escapeHtml(ep.title);
     nowMeta.innerHTML = fmtDate(ep.pubDate);
     if (ep.link) {
       officialLink.href = ep.link;
@@ -343,7 +352,8 @@
     for (var r = 0; r < rbtns.length; r++) {
       rbtns[r].onclick = (function (btn) {
         return function () {
-          activeRange = parseInt(btn.getAttribute("data-range"), 10) || 0;
+          var rv = btn.getAttribute("data-range");
+          activeRange = (rv === "shuffle") ? "shuffle" : (parseInt(rv, 10) || 0);
           for (var m2 = 0; m2 < rbtns.length; m2++) { rbtns[m2].className = ""; }
           btn.className = "active";
           limit = PAGE_SIZE; render();
@@ -364,6 +374,7 @@
       for (var i = 0; i < data.length; i++) {
         if (data[i] && data[i].source && data[i].number) { episodes.push(data[i]); }
       }
+      for (var s2 = 0; s2 < SPECIALS.length; s2++) { episodes.push(SPECIALS[s2]); }
       episodes.sort(function (a, b) { return a.number - b.number; });
       updateHero();
       render();
