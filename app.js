@@ -251,11 +251,19 @@
     };
     audio.addEventListener("loadedmetadata", onMeta);
     if (autoplay) {
-      // Start loading/playing immediately: in background playback iOS may
-      // never deliver loadedmetadata, which used to stall auto-advance.
+      // Start playing immediately: in background playback iOS may never
+      // deliver loadedmetadata, which used to stall auto-advance.
+      // Do NOT call audio.load() here: resetting the element in the
+      // background can tear down the audio session and the next episode
+      // then "plays" silently (progress bar moves, no sound).
       try { audio.preload = "auto"; } catch (e) {}
-      try { audio.load(); } catch (e) {}
       try { var pr = audio.play(); if (pr && pr.catch) { pr.catch(function () {}); } } catch (e) {}
+      var onCanPlay = function () {
+        audio.removeEventListener("canplay", onCanPlay);
+        // Nudge the output awake once data is flowing.
+        try { var pr2 = audio.play(); if (pr2 && pr2.catch) { pr2.catch(function () {}); } } catch (e) {}
+      };
+      audio.addEventListener("canplay", onCanPlay);
     }
     render();
   }
@@ -372,8 +380,8 @@
       if (typeof MediaMetadata !== "undefined") {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: (ep.special ? "" : "第" + ep.number + "回 ") + ep.title,
-          artist: "personal player",
-          album: ep.special ? "シャッフルラジオ" : "personal player"
+          artist: "匿名ラジオ",
+          album: ep.special ? "シャッフルラジオ" : "匿名ラジオ"
         });
       }
       var ms = navigator.mediaSession;
