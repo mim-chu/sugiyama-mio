@@ -381,8 +381,9 @@
       try { ms.setActionHandler("pause", function () { audio.pause(); }); } catch (e) {}
       try { ms.setActionHandler("previoustrack", function () { doPrev(); }); } catch (e) {}
       try { ms.setActionHandler("nexttrack", function () { doNext(); }); } catch (e) {}
-      try { ms.setActionHandler("seekbackward", function () { audio.currentTime = Math.max(0, (audio.currentTime || 0) - 10); }); } catch (e) {}
-      try { ms.setActionHandler("seekforward", function () { audio.currentTime = (audio.currentTime || 0) + 30; }); } catch (e) {}
+      // No seekbackward/seekforward handlers on purpose: when they are set,
+      // iOS shows 10-second skip buttons in Control Center instead of the
+      // previous/next track buttons.
     } catch (e) {}
   }
   seekEl.onchange = function () {
