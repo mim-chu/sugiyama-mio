@@ -247,9 +247,16 @@
       if (startPos > 5 && audio.duration && startPos < audio.duration - 10) {
         try { audio.currentTime = startPos; } catch (e) {}
       }
-      if (autoplay) { audio.play(); }
+      if (autoplay) { try { audio.play(); } catch (e) {} }
     };
     audio.addEventListener("loadedmetadata", onMeta);
+    if (autoplay) {
+      // Start loading/playing immediately: in background playback iOS may
+      // never deliver loadedmetadata, which used to stall auto-advance.
+      try { audio.preload = "auto"; } catch (e) {}
+      try { audio.load(); } catch (e) {}
+      try { var pr = audio.play(); if (pr && pr.catch) { pr.catch(function () {}); } } catch (e) {}
+    }
     render();
   }
 
