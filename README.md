@@ -1,5 +1,7 @@
 # personal player
 
+▶ Play: https://mim-chu.github.io/sugiyama-mio/
+
 A personal, unofficial web player for listening in the browser.
 
 - Open `index.html` via a static host / local server.
