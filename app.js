@@ -322,6 +322,31 @@
     if (nx) { playEpisode(nx, true); } else { render(); }
   });
 
+  // PiP page support (pip.html): the media element is a <video> there.
+  // Move it into the player bar as artwork and wire the PiP button.
+  var pipBtn = document.getElementById("btn-pip");
+  if (audio.tagName === "VIDEO") {
+    var slot = document.getElementById("video-slot");
+    if (slot) { slot.appendChild(audio); }
+    if (pipBtn) {
+      var pipOk = (typeof audio.requestPictureInPicture === "function") ||
+        (typeof audio.webkitSetPresentationMode === "function");
+      if (!pipOk) { pipBtn.style.display = "none"; }
+      pipBtn.onclick = function () {
+        try {
+          if (typeof audio.webkitSetPresentationMode === "function" &&
+              audio.webkitPresentationMode !== "picture-in-picture") {
+            audio.webkitSetPresentationMode("picture-in-picture");
+          } else if (typeof audio.requestPictureInPicture === "function") {
+            audio.requestPictureInPicture();
+          }
+        } catch (e) {}
+      };
+    }
+  } else if (pipBtn) {
+    pipBtn.style.display = "none";
+  }
+
   // Controls
   playBtn.onclick = function () {
     if (!current) {
