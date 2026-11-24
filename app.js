@@ -326,31 +326,44 @@
   // Move it into the player bar as artwork and wire the PiP button.
   var pipBtn = document.getElementById("btn-pip");
   if (audio.tagName === "VIDEO") {
-    var slot = document.getElementById("video-slot");
-    if (slot) { slot.appendChild(audio); }
     // The episode element itself has no video track (audio-only file), so
-    // iOS refuses PiP on it. Use a tiny silent video WITH real frames as
-    // the PiP carrier; the episode audio keeps playing alongside it.
+    // iOS refuses PiP on it. A tiny silent video WITH real frames rides in
+    // the player bar as artwork, already playing; it carries the PiP
+    // window while the episode audio keeps playing alongside it.
     var pv = document.getElementById("pip-video");
+    var dbg = document.getElementById("pip-debug");
     var pipStarted = false;
+    function pipLog(msg) { if (dbg) { dbg.textContent = "PiP診断: " + msg; } }
     if (pipBtn && pv) {
-      var pipOk = (typeof pv.requestPictureInPicture === "function") ||
-        (typeof pv.webkitSetPresentationMode === "function");
-      if (!pipOk) { pipBtn.style.display = "none"; }
+      var sup = "?";
+      try {
+        if (typeof pv.webkitSupportsPresentationMode === "function") {
+          sup = pv.webkitSupportsPresentationMode("picture-in-picture") ? "対応" : "非対応";
+        }
+      } catch (e) {}
+      pipLog("PiP " + sup + " / 動画の状態 " + pv.readyState);
       pipBtn.onclick = function () {
-        try { pv.play(); } catch (e) {}
-        setTimeout(function () {
-          try {
-            if (typeof pv.webkitSetPresentationMode === "function" &&
-                pv.webkitPresentationMode !== "picture-in-picture") {
-              pv.webkitSetPresentationMode("picture-in-picture");
-              pipStarted = true;
-            } else if (typeof pv.requestPictureInPicture === "function") {
-              pv.requestPictureInPicture();
-              pipStarted = true;
-            }
-          } catch (e) {}
-        }, 350);
+        // Call synchronously inside the tap: delaying this can make iOS
+        // ignore the request entirely.
+        try {
+          if (pv.paused) { pv.play(); }
+          if (typeof pv.webkitSetPresentationMode === "function" &&
+              pv.webkitPresentationMode !== "picture-in-picture") {
+            pv.webkitSetPresentationMode("picture-in-picture");
+            pipStarted = true;
+            setTimeout(function () {
+              pipLog("モード=" + pv.webkitPresentationMode + " / 状態 " + pv.readyState);
+            }, 400);
+          } else if (typeof pv.requestPictureInPicture === "function") {
+            pv.requestPictureInPicture();
+            pipStarted = true;
+            pipLog("標準PiPを呼んだ");
+          } else {
+            pipLog("PiPの入口が見つからない");
+          }
+        } catch (e) {
+          pipLog("エラー " + (e && e.message ? e.message : e));
+        }
       };
       audio.addEventListener("play", function () {
         if (pipStarted && pv.paused) { try { pv.play(); } catch (e) {} }
