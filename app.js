@@ -328,20 +328,38 @@
   if (audio.tagName === "VIDEO") {
     var slot = document.getElementById("video-slot");
     if (slot) { slot.appendChild(audio); }
-    if (pipBtn) {
-      var pipOk = (typeof audio.requestPictureInPicture === "function") ||
-        (typeof audio.webkitSetPresentationMode === "function");
+    // The episode element itself has no video track (audio-only file), so
+    // iOS refuses PiP on it. Use a tiny silent video WITH real frames as
+    // the PiP carrier; the episode audio keeps playing alongside it.
+    var pv = document.getElementById("pip-video");
+    var pipStarted = false;
+    if (pipBtn && pv) {
+      var pipOk = (typeof pv.requestPictureInPicture === "function") ||
+        (typeof pv.webkitSetPresentationMode === "function");
       if (!pipOk) { pipBtn.style.display = "none"; }
       pipBtn.onclick = function () {
-        try {
-          if (typeof audio.webkitSetPresentationMode === "function" &&
-              audio.webkitPresentationMode !== "picture-in-picture") {
-            audio.webkitSetPresentationMode("picture-in-picture");
-          } else if (typeof audio.requestPictureInPicture === "function") {
-            audio.requestPictureInPicture();
-          }
-        } catch (e) {}
+        try { pv.play(); } catch (e) {}
+        setTimeout(function () {
+          try {
+            if (typeof pv.webkitSetPresentationMode === "function" &&
+                pv.webkitPresentationMode !== "picture-in-picture") {
+              pv.webkitSetPresentationMode("picture-in-picture");
+              pipStarted = true;
+            } else if (typeof pv.requestPictureInPicture === "function") {
+              pv.requestPictureInPicture();
+              pipStarted = true;
+            }
+          } catch (e) {}
+        }, 350);
       };
+      audio.addEventListener("play", function () {
+        if (pipStarted && pv.paused) { try { pv.play(); } catch (e) {} }
+      });
+      audio.addEventListener("pause", function () {
+        if (pipStarted && !pv.paused) { try { pv.pause(); } catch (e) {} }
+      });
+    } else if (pipBtn) {
+      pipBtn.style.display = "none";
     }
   } else if (pipBtn) {
     pipBtn.style.display = "none";
