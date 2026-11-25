@@ -390,8 +390,6 @@
         } catch (e) {}
       } else if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url);
-        shareBtn.textContent = "コピーした";
-        setTimeout(function () { shareBtn.textContent = "共有"; }, 2000);
       }
     };
   }

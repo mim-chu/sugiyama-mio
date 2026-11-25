@@ -7,7 +7,7 @@ body.compact { padding-bottom: 118px; }
 .brand { float: left; font-family: "Montserrat", "Arial Black", "Hiragino Sans", sans-serif; font-weight: 900; font-style: italic; font-size: 30px; letter-spacing: 0; color: #fff; -webkit-text-stroke: 1.4px #221d1d; text-shadow: none; }
 .brand .rd { color: #b50a27; }
 .badge { float: right; font-size: 12px; background: #b50a27; color: #fff; padding: 3px 8px; border-radius: 10px; margin-top: 4px; }
-.share-btn { float: right; font-size: 12px; background: #fff; color: #221d1d; border: 1.5px solid #221d1d; padding: 2px 9px; border-radius: 10px; margin: 4px 8px 0 0; cursor: pointer; }
+.share-btn { float: right; background: #fff; border: 1.5px solid #555; padding: 3px 7px; border-radius: 10px; margin: 4px 8px 0 0; cursor: pointer; line-height: 0; }
 .main { padding-top: 16px; }
 .hero { background: #fff; border: 2px solid #221d1d; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
 .hero-label { color: #b50a27; font-size: 13px; font-weight: bold; margin: 0 0 6px; }
@@ -59,4 +59,4 @@ body.compact { padding-bottom: 118px; }
 .player.compact .seek-row, .player.compact .btn-row label, .player.compact .btn-row a { display: none; }
 .player.compact .btn-row button { padding: 8px 13px; font-size: 14px; }
 .player.compact .btn-row .play-btn { padding: 9px 18px; font-size: 15px; }
-@media (max-width: 480px) { .seek-row input { width: 52%; } .hero h1 { font-size: 19px; } .brand { font-size: 21px; -webkit-text-stroke-width: 1px; text-shadow: none; } .badge { font-size: 10px; } .share-btn { font-size: 10px; } }
+@media (max-width: 480px) { .seek-row input { width: 52%; } .hero h1 { font-size: 19px; } .brand { font-size: 21px; -webkit-text-stroke-width: 1px; text-shadow: none; } .badge { font-size: 10px; } }
