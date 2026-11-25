@@ -365,12 +365,7 @@
           pipLog("エラー " + (e && e.message ? e.message : e));
         }
       };
-      pv.onclick = function () {
-        try {
-          if (typeof pv.webkitEnterFullscreen === "function") { pv.webkitEnterFullscreen(); }
-          else if (typeof pv.requestFullscreen === "function") { pv.requestFullscreen(); }
-        } catch (e) {}
-      };
+      
       audio.addEventListener("play", function () {
         if (pipStarted && pv.paused) { try { pv.play(); } catch (e) {} }
       });
@@ -382,6 +377,23 @@
     }
   } else if (pipBtn) {
     pipBtn.style.display = "none";
+  }
+
+  var shareBtn = document.getElementById("btn-share");
+  if (shareBtn) {
+    shareBtn.onclick = function () {
+      var url = location.href;
+      if (navigator.share) {
+        try {
+          var p = navigator.share({ title: document.title, url: url });
+          if (p && p.catch) { p.catch(function () {}); }
+        } catch (e) {}
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url);
+        shareBtn.textContent = "コピーした";
+        setTimeout(function () { shareBtn.textContent = "共有"; }, 2000);
+      }
+    };
   }
 
   // Controls
