@@ -325,7 +325,7 @@
   // PiP page support (pip.html): the media element is a <video> there.
   // Move it into the player bar as artwork and wire the PiP button.
   var pipBtn = document.getElementById("btn-pip");
-  if (audio.tagName === "VIDEO") {
+  if (document.getElementById("pip-video")) {
     // The episode element itself has no video track (audio-only file), so
     // iOS refuses PiP on it. A tiny silent video WITH real frames rides in
     // the player bar as artwork, already playing; it carries the PiP

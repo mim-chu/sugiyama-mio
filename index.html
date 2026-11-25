@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="./IMG_5883.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./styles.css?v=20261124c">
+<link rel="stylesheet" href="./styles.css?v=20261125a">
 </head>
 <body>
 <header class="site-header">
@@ -82,6 +82,7 @@
 <div class="player" id="player">
   <div class="wrap player-inner">
     <div class="now">
+      <video id="pip-video" muted autoplay loop playsinline preload="auto" src="./silent.mp4" width="54" height="54" style="float:left;margin-right:10px;border-radius:10px;background:#000;"></video>
       <div class="now-text">
         <div class="now-title" id="now-title">未選択</div>
         <div class="now-meta" id="now-meta"></div>
@@ -98,6 +99,7 @@
       <button type="button" id="btn-play" class="play-btn">▶ 再生</button>
       <button type="button" id="btn-next">次の回</button>
       <button type="button" id="btn-shuffle">シャッフル OFF</button>
+      <button type="button" id="btn-pip">PiP</button>
       <label>速度
         <select id="speed">
           <option value="0.75">0.75x</option>
@@ -124,6 +126,6 @@
 </div>
 
 <audio id="audio" preload="metadata"></audio>
-<script src="./app.js?v=20261124c"></script>
+<script src="./app.js?v=20261125a"></script>
 </body>
 </html>
